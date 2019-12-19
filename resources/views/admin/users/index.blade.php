@@ -29,14 +29,19 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{  implode(',',$user->roles->pluck('name')->toArray()) }}</td>
                                 <td>
-                                    <a href="{{ route('admin.users.edit',$user->id) }} " class="btn btn-primary">Editer</a>
-                                    
+                                    @can('edit-users')
 
+                                    <a href="{{ route('admin.users.edit',$user->id) }} " class="btn btn-primary">Editer</a>
+                                    @endcan
+
+                                    @can('delete-users')
+                                    
                                     <form action="{{ route('admin.users.destroy',$user->id) }}" method="post" class="d-inline">
                                         @csrf 
                                         @method('DELETE')
                                          <button type="submit"  class="btn btn-warning">Supprimer</button>
                                     </form>
+                                    @endcan
                                 </td>
                               </tr>
                             @endforeach
