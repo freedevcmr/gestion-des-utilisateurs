@@ -18,3 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
+
+    Route::resource('/admin/users','UsersController');
+});
+
+// Route::resource('/admin/users','Admin\UsersController');

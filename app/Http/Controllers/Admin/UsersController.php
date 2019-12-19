@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
@@ -14,7 +16,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
+        // return "affiche la liste des utilisateurs";
     }
 
     /**
@@ -24,7 +28,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        // return "affiche le formulaire de creation"; 
+      
     }
 
     /**
@@ -55,9 +60,14 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+        return view('admin.users.edit',[
+            'user'=>$user,
+            'roles'=>$roles
+
+        ]);
     }
 
     /**
@@ -67,9 +77,12 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,User $user)
     {
-        //
+        // dd($request);
+        $user->roles()->sync($request->roles);
+
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -78,8 +91,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->roles()->detach();
+        $user->delete();
+        return redirect(route('admin.users.index'));
     }
 }
